@@ -68,6 +68,40 @@ app.route("/articles/:articleTitle")
             res.send("no article with matching title");
         }
     });
+})
+.put(function(req,res){
+    const articleTitle = req.params.articleTitle;
+    Article.update({title: articleTitle},
+        {title:req.body.title,
+            content:req.body.content},
+            {overwrite:true},
+        function(err,foundArticle){
+if(!err){
+    res.send("successfully updated");
+}
+    });
+})
+.patch(function(req, res){
+    const articleTitle = req.params.articleTitle;
+    Article.update(
+      {title: articleTitle},
+      {$set:req.body},
+      function(err){
+        if (!err){
+          res.send("Successfully updated selected article.");
+        } else {
+          res.send(err);
+        }
+      });
+  })
+  .delete((req,res)=>{
+    const articleTitle = req.params.articleTitle;
+    Article.deleteOne({title: articleTitle},function(err){
+        if(!err){
+            res.send("article deleted");
+        }
+    });
+
 });
 
 
